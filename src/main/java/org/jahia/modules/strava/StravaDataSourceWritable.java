@@ -58,6 +58,7 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
 
     // Http client
     private HttpClient httpClient;
+    private int HTTP_400 = 400;
 
     // Cache
     private EhCacheProvider ehCacheProvider;
@@ -89,7 +90,7 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
 
     // Constants
     private static final String ACTIVITY             = "activity";
-    private static final String NB_ACTIVITIES_LOADED = "50";
+    private static final String NB_ACTIVITIES_LOADED = "20";
 
     // CONSTRUCTOR
 
@@ -277,8 +278,9 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
     @Override
     public void saveItem(ExternalData data) throws RepositoryException {
         // Var
-        org.apache.http.client.HttpClient httpClient = new DefaultHttpClient();
+        org.apache.http.client.HttpClient httpClient;
         HttpResponse response;
+        int statusCode = 200;
 
         // Retrieve the path of the file to upload in Strava
         String filename = data.getProperties().get(FILENAME)[0];
@@ -299,14 +301,34 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
         httpPost.setEntity(reqEntity);
 
         try {
-            // Execute
-            response = httpClient.execute(httpPost);
 
-            // Look the response
-            HttpEntity respEntity = response.getEntity();
-            if (respEntity != null) {
-                String content = EntityUtils.toString(respEntity);
-                System.out.println(content);
+            while (statusCode != HTTP_400) {
+
+                httpClient = new DefaultHttpClient();
+
+                // Execute
+                response = httpClient.execute(httpPost);
+
+                // Look the response
+                HttpEntity respEntity = response.getEntity();
+                if (respEntity != null) {
+                    String content = EntityUtils.toString(respEntity);
+                    System.out.println(content);
+                }
+
+                // Status code
+                statusCode = response.getStatusLine().getStatusCode();
+
+                // Consume
+                EntityUtils.consumeQuietly(response.getEntity());
+            }
+
+            // Wait the upload of the file on Strava
+            // Strava says : "The mean processing time is currently around 8 seconds"
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
             // Empty cache
