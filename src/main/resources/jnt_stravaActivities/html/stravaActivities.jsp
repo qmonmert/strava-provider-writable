@@ -23,18 +23,18 @@
 
 <table class="table table-striped table-bordered">
     <thead>
-        <th>#</th>
-        <th>Name</th>
-        <th>Distance</th>
-        <th>Type</th>
+        <th class="strava-align">#</th>
+        <th>Activity name</th>
+        <th class="strava-align">Distance</th>
+        <th class="strava-align">Type</th>
     </thead>
     <tbody>
         <c:forEach items="${res.nodes}" var="stravaActivity" varStatus="status">
             <tr>
-                <td>${status.index + 1}</td>
+                <td class="strava-align">${status.index + 1}</td>
                 <td>${stravaActivity.properties['name'].string}</td>
-                <td>${stravaActivity.properties['distance'].string}</td>
-                <td>${stravaActivity.properties['type'].string}</td>
+                <td class="strava-align">${stravaActivity.properties['distance'].string}</td>
+                <td class="strava-align">${stravaActivity.properties['type'].string}</td>
             </tr>
         </c:forEach>
     </tbody>

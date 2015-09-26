@@ -32,6 +32,7 @@ import javax.jcr.RepositoryException;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -91,6 +92,7 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
     // Constants
     private static final String ACTIVITY             = "activity";
     private static final String NB_ACTIVITIES_LOADED = "20";
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##.##");
 
     // CONSTRUCTOR
 
@@ -193,7 +195,7 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
                 JSONArray activities = getCacheStravaActivities(false);
                 JSONObject activity = (JSONObject) activities.get(Integer.parseInt(numActivity[0]) - 1);
                 properties.put(NAME, new String[]{activity.getString(NAME)});
-                properties.put(DISTANCE, new String[]{activity.getString(DISTANCE)});
+                properties.put(DISTANCE, new String[]{DECIMAL_FORMAT.format(Double.parseDouble(activity.getString(DISTANCE)) / 1000)});
                 properties.put(TYPE, new String[]{activity.getString(TYPE)});
                 ExternalData data = new ExternalData(identifier, "/" + identifier, JNT_STRAVA_ACTIVITY, properties);
                 return data;
