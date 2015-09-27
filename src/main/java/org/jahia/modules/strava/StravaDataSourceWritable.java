@@ -7,6 +7,7 @@ import net.sf.ehcache.Element;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpsURL;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -20,6 +21,7 @@ import org.jahia.modules.external.ExternalData;
 import org.jahia.modules.external.ExternalDataSource;
 import org.jahia.modules.external.ExternalQuery;
 import org.jahia.modules.external.query.QueryHelper;
+import org.jahia.modules.strava.utils.StravaUtils;
 import org.jahia.services.cache.ehcache.EhCacheProvider;
 import org.jahia.services.content.nodetypes.NodeTypeRegistry;
 import org.json.JSONArray;
@@ -59,7 +61,6 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
 
     // Http client
     private HttpClient httpClient;
-    private int HTTP_400 = 400;
 
     // Cache
     private EhCacheProvider ehCacheProvider;
@@ -80,11 +81,12 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
     private String apiKeyValuePost;
 
     // Properties : strava
-    private static final String ID       = "id";
-    private static final String NAME     = "name";
-    private static final String DISTANCE = "distance";
-    private static final String TYPE     = "type";
-    private static final String FILENAME = "filename";
+    private static final String ID          = "id";
+    private static final String NAME        = "name";
+    private static final String DISTANCE    = "distance";
+    private static final String TYPE        = "type";
+    private static final String MOVING_TIME = "moving_time";
+    private static final String FILENAME    = "filename";
 
     // Properties : JCR
     private static final String ROOT  = "root";
@@ -132,6 +134,11 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
 
     // UTILS
 
+    /**
+     * Execute a request on the strava API : https://www.strava.com:443/ + path + params
+     * Example :
+     *      - https://www.strava.com:443/api/v3/athlete/activities?access_token=xxx&per_page=20
+     */
     private JSONArray queryStrava(String path, String... params) throws RepositoryException {
         try {
             HttpsURL url = new HttpsURL(URL_STRAVA, PORT_STRAVA, path);
@@ -140,7 +147,7 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
             m.put(ACCES_TOKEN, apiKeyValue);
             m.put(PER_PAGE, NB_ACTIVITIES_LOADED);
             url.setQuery(m.keySet().toArray(new String[m.size()]), m.values().toArray(new String[m.size()]));
-            System.out.println("=> Start request strava-writable : " + url);
+            System.out.println("=> Request URL : " + url);
             GetMethod httpMethod = new GetMethod(url.toString());
             try {
                 httpClient.executeMethod(httpMethod);
@@ -154,6 +161,13 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
         }
     }
 
+    /**
+     * Retieve all the strava activities.
+     * If deleteCache
+     *      retrieve the activities on strava (exemple : after the upload of a new activity)
+     * Else
+     *      retrieve the activities on cache
+     */
     private JSONArray getCacheStravaActivities(boolean deleteCache) throws RepositoryException {
         JSONArray activities;
         if (cache.get(CACHE_STRAVA_ACTVITIES) != null && !deleteCache) {
@@ -174,8 +188,11 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
                 JSONArray activities = getCacheStravaActivities(false);
                 for (int i = 1; i <= activities.length(); i++) {
                     JSONObject activity = (JSONObject) activities.get(i - 1);
-                    r.add((i <= 9 ? "0" : "") + i + "-" + ACTIVITY + "-" + activity.get(ID));
+                    r.add(StravaUtils.displayNumberTwoDigits(i) + "-" + ACTIVITY + "-" + activity.get(ID));
                 }
+                // r contains all the system name of the activities
+                // with their ID activity and a prefix to order the nodes (activities)
+                // example : 08-activity-401034489
             } catch (JSONException e) {
                 throw new RepositoryException(e);
             }
@@ -193,16 +210,21 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
         if (numActivity.length == 3) {
             try {
                 JSONArray activities = getCacheStravaActivities(false);
+                // Find the activity by its identifier
                 JSONObject activity = (JSONObject) activities.get(Integer.parseInt(numActivity[0]) - 1);
+                // Add some properties
                 properties.put(NAME, new String[]{activity.getString(NAME)});
                 properties.put(DISTANCE, new String[]{DECIMAL_FORMAT.format(Double.parseDouble(activity.getString(DISTANCE)) / 1000)});
                 properties.put(TYPE, new String[]{activity.getString(TYPE)});
+                properties.put(MOVING_TIME, new String[]{StravaUtils.displayMovingTime(activity.getString(MOVING_TIME))});
+                // Return the external data (a node)
                 ExternalData data = new ExternalData(identifier, "/" + identifier, JNT_STRAVA_ACTIVITY, properties);
                 return data;
             } catch (Exception e) {
                 throw new ItemNotFoundException(identifier);
             }
         } else {
+            // Node not again created
             throw new ItemNotFoundException(identifier);
         }
     }
@@ -251,8 +273,10 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
                 JSONArray activities = getCacheStravaActivities(false);
                 for (int i = 1; i <= activities.length(); i++) {
                     JSONObject activity = (JSONObject) activities.get(i - 1);
-                    results.add("/" + (i <= 9 ? "0" : "") + i + "-" + ACTIVITY + "-" + activity.get(ID));
+                    results.add("/" + StravaUtils.displayNumberTwoDigits(i) + "-" + ACTIVITY + "-" + activity.get(ID));
                 }
+                // results contains all the path of the activities
+                // example of a path : /08-activity-401034489
             } catch (JSONException e) {
                 throw new RepositoryException(e);
             }
@@ -280,34 +304,33 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
     @Override
     public void saveItem(ExternalData data) throws RepositoryException {
         // Var
-        org.apache.http.client.HttpClient httpClient;
+        org.apache.http.client.HttpClient httpClient = new DefaultHttpClient();
         HttpResponse response;
-        int statusCode = 200;
 
         // Retrieve the path of the file to upload in Strava
+        // It's a property of the node stravaActivity
         String filename = data.getProperties().get(FILENAME)[0];
 
-        // Prepare the post
-        HttpPost httpPost = new HttpPost(HTTPS + URL_STRAVA + API_V3_UPLOADS);
-        httpPost.addHeader(AUTHORIZATION, BEARER + " " + apiKeyValuePost);
-        httpPost.setHeader(ENCTYPE, MULTIPART_FORM_DATA);
-        MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-        try {
-            reqEntity.addPart(ACTIVITY_TYPE, new StringBody(RUN));
-            reqEntity.addPart(DATA_TYPE, new StringBody(GPX));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        FileBody body = new FileBody(new File(filename));
-        reqEntity.addPart(FILE, body);
-        httpPost.setEntity(reqEntity);
+        if (StringUtils.isNotBlank(filename)) {
 
-        try {
+            // Upload the activity file on Strava
 
-            while (statusCode != HTTP_400) {
+            // Prepare the post
+            HttpPost httpPost = new HttpPost(HTTPS + URL_STRAVA + API_V3_UPLOADS);
+            httpPost.addHeader(AUTHORIZATION, BEARER + " " + apiKeyValuePost);
+            httpPost.setHeader(ENCTYPE, MULTIPART_FORM_DATA);
+            MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+            try {
+                reqEntity.addPart(ACTIVITY_TYPE, new StringBody(RUN));
+                reqEntity.addPart(DATA_TYPE, new StringBody(GPX));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            FileBody body = new FileBody(new File(filename));
+            reqEntity.addPart(FILE, body);
+            httpPost.setEntity(reqEntity);
 
-                httpClient = new DefaultHttpClient();
-
+            try {
                 // Execute
                 response = httpClient.execute(httpPost);
 
@@ -315,29 +338,23 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
                 HttpEntity respEntity = response.getEntity();
                 if (respEntity != null) {
                     String content = EntityUtils.toString(respEntity);
-                    System.out.println(content);
+                    System.out.println("=> POST : " + content);
                 }
 
-                // Status code
-                statusCode = response.getStatusLine().getStatusCode();
+                // Wait the upload of the file on Strava
+                // Strava says : "The mean processing time is currently around 8 seconds"
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-                // Consume
-                EntityUtils.consumeQuietly(response.getEntity());
-            }
-
-            // Wait the upload of the file on Strava
-            // Strava says : "The mean processing time is currently around 8 seconds"
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            // Empty cache
+            // After the upload, recuperation of the activies on Strava
             getCacheStravaActivities(true);
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

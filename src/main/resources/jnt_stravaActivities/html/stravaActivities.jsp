@@ -26,6 +26,7 @@
         <th class="strava-align">#</th>
         <th>Activity name</th>
         <th class="strava-align">Distance</th>
+        <th class="strava-align">Time</th>
         <th class="strava-align">Type</th>
     </thead>
     <tbody>
@@ -34,6 +35,7 @@
                 <td class="strava-align">${status.index + 1}</td>
                 <td>${stravaActivity.properties['name'].string}</td>
                 <td class="strava-align">${stravaActivity.properties['distance'].string}</td>
+                <td class="strava-align">${stravaActivity.properties['moving_time'].string}</td>
                 <td class="strava-align">${stravaActivity.properties['type'].string}</td>
             </tr>
         </c:forEach>
