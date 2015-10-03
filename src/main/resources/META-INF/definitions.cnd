@@ -5,7 +5,7 @@
 - id (string) hidden
 - name (string)
 - distance (string)
-- type (string, choicelist) = 'Run', 'Ride'
+- type (string)
 - moving_time (string)
 - filename (String)
 
