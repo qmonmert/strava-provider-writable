@@ -33,7 +33,11 @@
         <c:forEach items="${res.nodes}" var="stravaActivity" varStatus="status">
             <tr>
                 <td class="strava-align">${status.index + 1}</td>
-                <td>${stravaActivity.properties['name'].string}</td>
+                <td>
+                    <a href="https://www.strava.com/activities/${stravaActivity.properties['id'].string}" target="_blank">
+                        ${stravaActivity.properties['name'].string}
+                    </a>
+                </td>
                 <td class="strava-align">${stravaActivity.properties['distance'].string}</td>
                 <td class="strava-align">${stravaActivity.properties['moving_time'].string}</td>
                 <td class="strava-align">${stravaActivity.properties['type'].string}</td>

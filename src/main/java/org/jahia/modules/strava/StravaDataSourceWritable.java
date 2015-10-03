@@ -234,6 +234,7 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
                 // Find the activity by its identifier
                 JSONObject activity = (JSONObject) activities.get(Integer.parseInt(numActivity[0]) - 1);
                 // Add some properties
+                properties.put(ID, new String[]{activity.getString(ID)});
                 properties.put(NAME, new String[]{activity.getString(NAME)});
                 properties.put(DISTANCE, new String[]{DECIMAL_FORMAT.format(Double.parseDouble(activity.getString(DISTANCE)) / 1000)});
                 properties.put(TYPE, new String[]{activity.getString(TYPE)});
