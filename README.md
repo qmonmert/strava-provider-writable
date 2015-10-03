@@ -18,7 +18,7 @@ External data provider to connect [Jahia](https://www.jahia.com/) and [Strava](h
 
 2. Utilization
 
-    * Got to the explository explorer
+    * Go to the explository explorer
 
     * Add a new content [jnt:stravaActivity] in the folder /strava-site/contents/strava-activities/
 
