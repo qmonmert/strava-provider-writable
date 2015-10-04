@@ -70,8 +70,7 @@
                             com.ibm.uvm.tools;resolution:=optional, com.sun.jdmk.comm;resolution:=optional, javax.jmdns;resolution:=optional, org.apache.avalon.framework.logger;resolution:=optional, org.apache.log;resolution:=optional, sun.security.util;resolution:=optional,${jahia.plugin.projectPackageImport},*
                         </Import-Package>
                         <Jahia-Depends>default,bootstrap-components,bootstrap,external-provider</Jahia-Depends>
-                        <_removeheaders>${jahia.modules.bundle.removeheaders},
-                            Jahia-Static-Resources</_removeheaders>
+                        <Jahia-Static-Resources>/css,/icons,/images,/img,/javascript,/html</Jahia-Static-Resources>
                     </instructions>
                 </configuration>
             </plugin>

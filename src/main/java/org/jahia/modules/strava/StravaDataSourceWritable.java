@@ -31,7 +31,6 @@ import javax.jcr.ItemNotFoundException;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -85,6 +84,7 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
     private static final String DISTANCE    = "distance";
     private static final String TYPE        = "type";
     private static final String MOVING_TIME = "moving_time";
+    private static final String START_DATE  = "start_date";
     private static final String FILENAME    = "filename";
 
     // Properties : JCR
@@ -93,7 +93,6 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
     // Constants
     private static final String ACTIVITY             = "activity";
     private static final String NB_ACTIVITIES_LOADED = "20";
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##.##");
 
     // CONSTRUCTOR
 
@@ -234,11 +233,12 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
                 // Find the activity by its identifier
                 JSONObject activity = (JSONObject) activities.get(Integer.parseInt(numActivity[0]) - 1);
                 // Add some properties
-                properties.put(ID, new String[]{activity.getString(ID)});
-                properties.put(NAME, new String[]{activity.getString(NAME)});
-                properties.put(DISTANCE, new String[]{DECIMAL_FORMAT.format(Double.parseDouble(activity.getString(DISTANCE)) / 1000)});
-                properties.put(TYPE, new String[]{activity.getString(TYPE)});
-                properties.put(MOVING_TIME, new String[]{StravaUtils.displayMovingTime(activity.getString(MOVING_TIME))});
+                properties.put(ID,          new String[]{ activity.getString(ID)   });
+                properties.put(NAME,        new String[]{ activity.getString(NAME) });
+                properties.put(TYPE,        new String[]{ activity.getString(TYPE) });
+                properties.put(DISTANCE,    new String[]{ StravaUtils.displayDistance(activity.getString(DISTANCE))      });
+                properties.put(MOVING_TIME, new String[]{ StravaUtils.displayMovingTime(activity.getString(MOVING_TIME)) });
+                properties.put(START_DATE,  new String[]{ StravaUtils.displayStartDate(activity.getString(START_DATE))   });
                 // Return the external data (a node)
                 ExternalData data = new ExternalData(identifier, "/" + identifier, JNT_STRAVA_ACTIVITY, properties);
                 return data;
@@ -310,14 +310,17 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
 
     @Override
     public void move(String oldPath, String newPath) throws RepositoryException {
+        LOGGER.info("Move : oldPath=" + oldPath + " newPath=" + newPath);
     }
 
     @Override
     public void order(String path, List<String> children) throws RepositoryException {
+        LOGGER.info("Order : path=" + path);
     }
 
     @Override
     public void removeItemByPath(String path) throws RepositoryException {
+        LOGGER.info("Remove item by path : path=" + path);
     }
 
     @Override

@@ -1,0 +1,51 @@
+body.body-bg {
+    background-color: white !important;
+    background-image: none !important;
+}
+
+.wrapper {
+    border-top: none !important;
+    box-shadow: none !important;
+    margin: 0 auto;
+    padding: 0 20px 0 20px !important;
+    min-width: 320px;
+    margin-top: 20px;
+}
+
+.strava-logo {
+    height: 24px;
+    width: 114px;
+    background-image: url("../img/strava-logo.svg");
+    background-size: 100%;
+    background-position: left top;
+    display: inline-block;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    text-align: left;
+    text-indent: -999em;
+    padding-bottom: 15px;
+}
+
+.strava-align {
+    text-align: center !important;
+}
+
+#activitiesTable {
+    font-size: 12px;
+}
+
+#activitiesTable td {
+    color: #333;
+}
+
+#activitiesTable a {
+    color: #007FB6;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+#activitiesTable a:hover {
+    color: #007FB6;
+    cursor: pointer;
+    text-decoration: underline;
+}

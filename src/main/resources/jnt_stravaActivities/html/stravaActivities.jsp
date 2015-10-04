@@ -18,21 +18,25 @@
 <%--@elvariable id="currentResource" type="org.jahia.services.render.Resource"--%>
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 
+<!-- Strava CSS -->
+<template:addResources type="css" resources="strava.css"/>
+
 <!-- SQL-2 query -->
 <jcr:sql var="res" sql="select * from [jnt:stravaActivity]"/>
 
-<table class="table table-striped table-bordered">
+<table id="activitiesTable" class="table table-striped table-bordered">
     <thead>
-        <th class="strava-align">#</th>
+        <th class="strava-align">Type</th>
+        <th class="strava-align">Date</th>
         <th>Activity name</th>
         <th class="strava-align">Distance</th>
         <th class="strava-align">Time</th>
-        <th class="strava-align">Type</th>
     </thead>
     <tbody>
         <c:forEach items="${res.nodes}" var="stravaActivity" varStatus="status">
             <tr>
-                <td class="strava-align">${status.index + 1}</td>
+                <td class="strava-align">${stravaActivity.properties['type'].string}</td>
+                <td class="strava-align">${stravaActivity.properties['start_date'].string}</td>
                 <td>
                     <a href="https://www.strava.com/activities/${stravaActivity.properties['id'].string}" target="_blank">
                         ${stravaActivity.properties['name'].string}
@@ -40,7 +44,6 @@
                 </td>
                 <td class="strava-align">${stravaActivity.properties['distance'].string}</td>
                 <td class="strava-align">${stravaActivity.properties['moving_time'].string}</td>
-                <td class="strava-align">${stravaActivity.properties['type'].string}</td>
             </tr>
         </c:forEach>
     </tbody>

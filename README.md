@@ -4,6 +4,10 @@ External data provider to connect [Jahia](https://www.jahia.com/) and [Strava](h
 
 1. Installation
 
+    * Install the [Community Distribution](https://www.jahia.com/fr/home/resources/developers-downloads/main/the-leading-open-source-java-uxp/downloadrow-2/df-community-sdk.html) of Digital Factory
+
+    * Start digital factory
+
     * Generate your strava access tokens :
         * [https://strava.github.io/api/](https://strava.github.io/api/)
         * [http://labs.strava.com/developers/](http://labs.strava.com/developers/)
@@ -12,7 +16,9 @@ External data provider to connect [Jahia](https://www.jahia.com/) and [Strava](h
 
     * Deploy the module strava-provider-writable on Jahia
 
-    * Create a site named strava-site on Jahia and deploy the module strava-provider-writable on this site
+    * Create a site named strava-site on Jahia and use the template set Bootstrap ACME Space Templates provided by Jahia
+
+    * Deploy the module strava-provider-writable on this site
 
     * Create a page on your site and add a component [jnt:stravaActivities] on this page
 
