@@ -8,6 +8,6 @@
 - type (string)
 - moving_time (string)
 - start_date (string)
-- filename (String)
+- filename (string)
 
 [jnt:stravaActivities] > jnt:content, jmix:structuredContent

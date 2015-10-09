@@ -52,6 +52,7 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
     private static final String DATA_TYPE         = "data_type";
     private static final String GPX               = "gpx";
     private static final String TCX               = "tcx";
+    private static final String FIT               = "fit";
     private static final String AUTHORIZATION     = "Authorization";
     private static final String BEARER            = "Bearer";
     private static final String ACTIVITY_READY    = "Your activity is ready.";
@@ -226,12 +227,13 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
             return new ExternalData(identifier, "/", JNT_CONTENT_FOLDER, new HashMap<String, String[]>());
         }
         Map<String, String[]> properties = new HashMap<>();
-        String[] numActivity = identifier.split("-");
-        if (numActivity.length == 3) {
+        String[] idActivity = identifier.split("-");
+        if (idActivity.length == 3) {
             try {
                 JSONArray activities = getCacheStravaActivities(false);
                 // Find the activity by its identifier
-                JSONObject activity = (JSONObject) activities.get(Integer.parseInt(numActivity[0]) - 1);
+                int numActivity = Integer.parseInt(idActivity[0]) - 1;
+                JSONObject activity = (JSONObject) activities.get(numActivity);
                 // Add some properties
                 properties.put(ID,          new String[]{ activity.getString(ID)   });
                 properties.put(NAME,        new String[]{ activity.getString(NAME) });
@@ -288,22 +290,23 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
     // Implements : ExternalDataSource.Searchable
 
     public List<String> search(ExternalQuery query) throws RepositoryException {
-        List<String> results = new ArrayList<>();
+        List<String> paths = new ArrayList<>();
         String nodeType = QueryHelper.getNodeType(query.getSource());
         if (NodeTypeRegistry.getInstance().getNodeType(JNT_STRAVA_ACTIVITY).isNodeType(nodeType)) {
             try {
                 JSONArray activities = getCacheStravaActivities(false);
                 for (int i = 1; i <= activities.length(); i++) {
                     JSONObject activity = (JSONObject) activities.get(i - 1);
-                    results.add("/" + StravaUtils.displayNumberTwoDigits(i) + "-" + ACTIVITY + "-" + activity.get(ID));
+                    String path = "/" + StravaUtils.displayNumberTwoDigits(i) + "-" + ACTIVITY + "-" + activity.get(ID);
+                    paths.add(path);
                 }
-                // results contains all the path of the activities
+                // paths contains all the path of the activities
                 // example of a path : /08-activity-401034489
             } catch (JSONException e) {
                 throw new RepositoryException(e);
             }
         }
-        return results;
+        return paths;
     }
 
     // Implements : ExternalDataSource.Writable
@@ -342,7 +345,7 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
         // Check extension of the file
         String[] tabsFilename = filename.split("\\.");
         String extension = tabsFilename[tabsFilename.length - 1];
-        boolean validExtension = (extension.equals(GPX) || extension.equals(TCX));
+        boolean validExtension = (extension.equals(GPX) || extension.equals(TCX) || extension.equals(FIT));
         if (!validExtension) {
             LOGGER.info("Bad file extension");
             return;
