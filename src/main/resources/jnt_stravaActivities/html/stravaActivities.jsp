@@ -18,8 +18,9 @@
 <%--@elvariable id="currentResource" type="org.jahia.services.render.Resource"--%>
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 
-<!-- Strava CSS -->
-<template:addResources type="css" resources="strava.css"/>
+<!-- CSS -->
+<template:addResources type="css" resources="strava.css"        />
+<template:addResources type="css" resources="bootstrap.min.css" />
 
 <!-- SQL-2 query -->
 <jcr:sql var="res" sql="select * from [jnt:stravaActivity]"/>
@@ -38,7 +39,7 @@
                 <td class="strava-align">${stravaActivity.properties['type'].string}</td>
                 <td class="strava-align">${stravaActivity.properties['start_date'].string}</td>
                 <td>
-                    <a href="https://www.strava.com/activities/${stravaActivity.properties['id'].string}" target="_blank">
+                    <a href="<c:url value="${url.base}${stravaActivity.path}.html"/>">
                         ${stravaActivity.properties['name'].string}
                     </a>
                 </td>
