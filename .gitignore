@@ -5,3 +5,5 @@
 *.iml
 *.ipr
 target
+.sass-cache
+node_modules

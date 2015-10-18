@@ -19,8 +19,7 @@
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 
 <!-- CSS -->
-<template:addResources type="css" resources="strava.css"        />
-<template:addResources type="css" resources="bootstrap.min.css" />
+<template:addResources type="css" resources="bundle.min.css" />
 
 <!-- SQL-2 query -->
 <jcr:sql var="res" sql="select * from [jnt:stravaActivity]"/>

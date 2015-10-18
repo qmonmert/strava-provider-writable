@@ -19,8 +19,7 @@
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 
 <!-- CSS -->
-<template:addResources type="css" resources="strava.css"        />
-<template:addResources type="css" resources="bootstrap.min.css" />
+<template:addResources type="css" resources="bundle.min.css" /> 
 
 <!-- Vars -->
 <c:set var="type"       value="${currentNode.properties['type'].string}"        />
