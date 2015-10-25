@@ -1,9 +1,10 @@
 /* Imports */
 @import 'activities';
 @import 'compass/css3';	
+@import "nav.scss";
 
 /* Variables */
-$logoStrava:        "strava-logo.svg";
+$logoStrava: "strava-logo.svg";
 
 body.body-bg {
     background-color: white !important;
@@ -33,6 +34,13 @@ body.body-bg {
     text-align: left;
     text-indent: -999em;
     padding-bottom: 15px;
+
+
+    float: left;
+    padding: 0;
+    line-height: 0;
+    margin-top: 15.5px;
+    margin-left: 10px;
 }
 
 .strava-align {

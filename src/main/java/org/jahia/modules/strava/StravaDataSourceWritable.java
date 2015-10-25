@@ -88,9 +88,6 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
     private static final String START_DATE  = "start_date";
     private static final String FILENAME    = "filename";
 
-    // Properties : visibility
-    private static final String J_FORCE_MATCH_ALL_CONDITIONS = "j:forceMatchAllConditions";
-
     // Properties : JCR
     private static final String ROOT  = "root";
 
@@ -244,8 +241,6 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
                 properties.put(DISTANCE,    new String[]{ StravaUtils.displayDistance(activity.getString(DISTANCE))      });
                 properties.put(MOVING_TIME, new String[]{ StravaUtils.displayMovingTime(activity.getString(MOVING_TIME)) });
                 properties.put(START_DATE,  new String[]{ StravaUtils.displayStartDate(activity.getString(START_DATE))   });
-                // Add a property for the visibility of the node
-                properties.put(J_FORCE_MATCH_ALL_CONDITIONS, new String[]{"true"});
                 // Return the external data (a node)
                 ExternalData data = new ExternalData(identifier, "/" + identifier, JNT_STRAVA_ACTIVITY, properties);
                 return data;
@@ -294,6 +289,7 @@ public class StravaDataSourceWritable implements ExternalDataSource, ExternalDat
 
     // Implements : ExternalDataSource.Searchable
 
+    @Override
     public List<String> search(ExternalQuery query) throws RepositoryException {
         List<String> paths = new ArrayList<>();
         String nodeType = QueryHelper.getNodeType(query.getSource());

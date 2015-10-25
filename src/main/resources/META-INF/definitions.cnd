@@ -1,7 +1,11 @@
 <jnt = 'http://www.jahia.org/jahia/nt/1.0'>
 <jmix = 'http://www.jahia.org/jahia/mix/1.0'>
 
-[jnt:stravaActivity] > jnt:content, jmix:structuredContent, jnt:conditionalVisibility
+[jnt:startEndDateCondition] > jnt:condition
+- start (date, datetimepicker)
+- end   (date, datetimepicker)
+
+[jnt:stravaActivity] > jnt:content, jmix:structuredContent
 - id (string) hidden
 - name (string)
 - distance (string)

@@ -10,7 +10,7 @@ var gulp        = require('gulp'),
 	urlAdjuster = require('gulp-css-url-adjuster'),
 	concatCss   = require('gulp-concat-css'),
 	del         = require('del'),
-	browserSync = require('browser-sync'),
+	browserSync = require('browser-sync').create(),
 	reload      = browserSync.reload,
     minifyCss   = require('gulp-minify-css'),
     compass     = require('gulp-compass');
@@ -49,7 +49,7 @@ gulp.task('build:css', ['clean:css', 'compass'], function() {
 			.pipe(concatCss("bundle.min.css"))
 			.pipe(minifyCss({compatibility: 'ie8'}))
 			.pipe(gulp.dest('src/main/resources/css/'))
-			.pipe(reload({stream:true}));
+			.pipe(browserSync.stream());
 });
 
 /**
@@ -58,6 +58,7 @@ gulp.task('build:css', ['clean:css', 'compass'], function() {
  */
 gulp.task('watch', function() {
 	gulp.watch(['src/**/*.scss'], ['build:css']);
+	gulp.watch('src/**/*.jsp').on('change', reload);
 });
 
 /**
@@ -68,11 +69,6 @@ gulp.task('browser-sync', function() {
         proxy: "http://localhost:8080/",
         startPath: "/cms/render/default/en/sites/strava-site/home.html"
     });
-	browserSync({
-		server: {
-			baseDir: '.'
-		}
-	})
 });
 
 /**

@@ -21,6 +21,54 @@
 <!-- CSS -->
 <template:addResources type="css" resources="bundle.min.css" />
 
+<!-- JS -->
+<template:addResources type="javascript" resources="nav.min.js" />
+
+<!-- Navigation bar -->
+<a class="mobile" href="#">&#9776;</a>
+<nav>
+
+
+    <div class="strava-logo">Strava</div>
+
+    <ul>
+        <li>
+            <a href="#">Tableau de bord</a>
+            <ul>
+                <li><a href="#">Flux d'actualités</a></li>
+                <li><a href="#">Mes segments</a></li>
+                <li><a href="#">Mes itinéraires</a></li>
+                <li><a href="#"></a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">Entraînement</a>
+            <ul>
+                <li><a href="#">Journal</a></li>
+                <li><a href="#">Calendrier</a></li>
+                <li><a href="#">Mes activités</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">Explorer</a>
+            <ul>
+                <li><a href="#">Explorateur de segments</a></li>
+                <li><a href="#">Recherche de segments</a></li>
+                <li><a href="#">Recherche d'athlètes</a></li>
+                <li><a href="#">Clubs</a></li>
+                <li><a href="#">Courses à pieds</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">Challenges</a>
+        </li>
+        <li>
+            <a href="#">Boutiques</a>
+        </li>
+    </ul>
+    <div style="clear:both;"></div>
+</nav>
+
 <!-- SQL-2 query -->
 <jcr:sql var="res" sql="select * from [jnt:stravaActivity]"/>
 
