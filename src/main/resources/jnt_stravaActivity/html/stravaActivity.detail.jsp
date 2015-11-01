@@ -29,6 +29,7 @@
 <c:set var="movingTime" value="${currentNode.properties['moving_time'].string}" />
 
 <!-- Content -->
+<div class="development"></div>
 <div class="panel panel-info">
     <div class="panel-heading">Activity : ${name}</div>
     <div class="panel-body">

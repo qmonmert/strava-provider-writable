@@ -31,3 +31,13 @@ External data provider to connect [Jahia](https://www.jahia.com/) and [Strava](h
     * Complete the field filename with a path file (GPX or TCX)
 
     * Go to the page of your site with the component [jnt:stravaActivities] and see that your activity was added
+
+3. Gulp
+
+    * Go into the project and launch in a terminal :
+        ```
+        $ npm install
+        $ gulp
+        ```
+
+    * Modify the jsp and scss files

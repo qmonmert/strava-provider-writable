@@ -5,6 +5,7 @@
 
 /* Variables */
 $logoStrava: "strava-logo.svg";
+$logoDevelopment: "development.png";
 
 body.body-bg {
     background-color: white !important;
@@ -34,8 +35,6 @@ body.body-bg {
     text-align: left;
     text-indent: -999em;
     padding-bottom: 15px;
-
-
     float: left;
     padding: 0;
     line-height: 0;
@@ -45,6 +44,20 @@ body.body-bg {
 
 .strava-align {
     text-align: center !important;
+}
+
+.development {
+    transform: rotate(90deg);
+    position: absolute;
+    width: 149px;
+    height: 149px;
+    top: 0;
+    right: 0;
+    border: 0;
+    z-index: 1000;
+    background-image: url($logoDevelopment);
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 

@@ -28,42 +28,42 @@
 <a class="mobile" href="#">&#9776;</a>
 <nav>
 
+    <div class="development"></div>
 
     <div class="strava-logo">Strava</div>
 
     <ul>
         <li>
-            <a href="#">Tableau de bord</a>
+            <a target="_blank" href="https://www.strava.com/dashboard">Tableau de bord</a>
             <ul>
-                <li><a href="#">Flux d'actualités</a></li>
-                <li><a href="#">Mes segments</a></li>
-                <li><a href="#">Mes itinéraires</a></li>
-                <li><a href="#"></a></li>
+                <li><a target="_blank" href="https://www.strava.com/dashboard">Flux d'actualités</a></li>
+                <li><a target="_blank" href="https://www.strava.com/athlete/segments/starred">Mes segments</a></li>
+                <li><a target="_blank" href="https://www.strava.com/athlete/routes">Mes itinéraires</a></li>
             </ul>
         </li>
         <li>
-            <a href="#">Entraînement</a>
+            <a href="https://www.strava.com/athlete/training/log">Entraînement</a>
             <ul>
-                <li><a href="#">Journal</a></li>
-                <li><a href="#">Calendrier</a></li>
-                <li><a href="#">Mes activités</a></li>
+                <li><a target="_blank" href="https://www.strava.com/athlete/training/log">Journal</a></li>
+                <li><a target="_blank" href="https://www.strava.com/athlete/calendar">Calendrier</a></li>
+                <li><a target="_blank" href="https://www.strava.com/athlete/training">Mes activités</a></li>
             </ul>
         </li>
         <li>
-            <a href="#">Explorer</a>
+            <a target="_blank" href="https://www.strava.com/segments/explore">Explorer</a>
             <ul>
-                <li><a href="#">Explorateur de segments</a></li>
-                <li><a href="#">Recherche de segments</a></li>
-                <li><a href="#">Recherche d'athlètes</a></li>
-                <li><a href="#">Clubs</a></li>
-                <li><a href="#">Courses à pieds</a></li>
+                <li><a target="_blank" href="https://www.strava.com/segments/explore">Explorateur de segments</a></li>
+                <li><a target="_blank" href="https://www.strava.com/segments/search">Recherche de segments</a></li>
+                <li><a target="_blank" href="https://www.strava.com/athletes/search">Recherche d'athlètes</a></li>
+                <li><a target="_blank" href="https://www.strava.com/clubs/search">Clubs</a></li>
+                <li><a target="_blank" href="https://www.strava.com/featured-running-races">Courses à pieds</a></li>
             </ul>
         </li>
         <li>
-            <a href="#">Challenges</a>
+            <a target="_blank" href="https://www.strava.com/challenges">Challenges</a>
         </li>
         <li>
-            <a href="#">Boutiques</a>
+            <a target="_blank" href="https://www.strava.com/shop?utm_campaign=evergreen&utm_medium=web&utm_source=top-nav">Boutiques</a>
         </li>
     </ul>
     <div style="clear:both;"></div>

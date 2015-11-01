@@ -13,7 +13,8 @@ var gulp        = require('gulp'),
 	browserSync = require('browser-sync').create(),
 	reload      = browserSync.reload,
     minifyCss   = require('gulp-minify-css'),
-    compass     = require('gulp-compass');
+    compass     = require('gulp-compass'),
+    runSequence = require('run-sequence');
 
 /**
  * Task : transform sass/strava.scss in css/strava.css
@@ -53,11 +54,27 @@ gulp.task('build:css', ['clean:css', 'compass'], function() {
 });
 
 /**
+ * Task : delete strava.css
+ */
+gulp.task('clean-strava:css', function() {
+    del([
+        'src/main/resources/css/strava.css'
+    ]);
+});
+
+/**
+ * Task : run build:css and after clean-strava:css
+ */
+gulp.task('build', function(callback) {
+    runSequence('build:css', 'clean-strava:css', callback);
+});
+
+/**
  * Task : watch sass/strava.scss
- * Before start buid:css task.
+ * Before start build task.
  */
 gulp.task('watch', function() {
-	gulp.watch(['src/**/*.scss'], ['build:css']);
+	gulp.watch(['src/**/*.scss'], ['build']);
 	gulp.watch('src/**/*.jsp').on('change', reload);
 });
 
