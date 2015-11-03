@@ -25,8 +25,10 @@
 
     <bean name="StravaDataSourceWritable" class="org.jahia.modules.strava.StravaDataSourceWritable" init-method="start">
         <property name="cacheProvider" ref="ehCacheProvider"/>
-        <property name="apiKeyValue" value="${access_token}"/>
-        <property name="apiKeyValuePost" value="${access_token_post}"/>
+        <!-- <property name="apiKeyValue" value="${access_token}"/> -->
+        <property name="apiKeyValue" value="7352ab3baeb484779ced1f9a35c03bcd4340a403"/>
+        <!-- <property name="apiKeyValuePost" value="${access_token_post}"/> -->
+        <property name="apiKeyValuePost" value="885d832f3b6ded8c2808127f4ee7514fcd454f7a"/>
     </bean>
 
 </beans>

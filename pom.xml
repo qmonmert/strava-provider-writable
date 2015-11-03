@@ -74,6 +74,22 @@
                     </instructions>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <configuration>
+                    <tasks>
+                        <copy file="/Users/Quentin/Documents/Tech/Jahia/workspace/strava-provider-writable/target/strava-provider-writable-1.0-SNAPSHOT.jar" tofile="/Users/Quentin/Documents/Tech/Jahia/CommunityDistribution-DigitalFactory-7100-SDK/digital-factory-data/modules/strava-provider-writable-1.0-SNAPSHOT.jar"/>
+                    </tasks>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
