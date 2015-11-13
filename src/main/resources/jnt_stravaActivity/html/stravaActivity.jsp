@@ -18,4 +18,58 @@
 <%--@elvariable id="currentResource" type="org.jahia.services.render.Resource"--%>
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 
-Strava Activity
+<!-- CSS -->
+<template:addResources type="css" resources="bundle.min.css" />
+
+<!-- Vars -->
+<c:set var="type"       value="${currentNode.properties['type'].string}"        />
+<c:set var="startDate"  value="${currentNode.properties['start_date'].string}"  />
+<c:set var="name"       value="${currentNode.properties['name'].string}"        />
+<c:set var="distance"   value="${currentNode.properties['distance'].string}"    />
+<c:set var="movingTime" value="${currentNode.properties['moving_time'].string}" />
+
+<!-- Content -->
+<div class="development"></div>
+<div class="panel panel-info">
+    <div class="panel-heading">Activity : ${name}</div>
+    <div class="panel-body">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="activityName" class="col-sm-2 control-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="activityName" value="${name}" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="activityType" class="col-sm-2 control-label">Type</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="activityType" value="${type}" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="activityDistance" class="col-sm-2 control-label">Distance</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="activityDistance" value="${distance}" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="activityMovingTime" class="col-sm-2 control-label">Time</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="activityMovingTime" value="${movingTime}" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="activityStartDate" class="col-sm-2 control-label">Date</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="activityStartDate" value="${startDate}" disabled>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<p class="text-center">
+    <a class="btn btn-warning btn-sm" href="#" role="button" onclick="javascript:window.history.back();">
+        Back
+    </a>
+</p>

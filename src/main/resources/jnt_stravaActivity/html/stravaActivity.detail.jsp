@@ -18,8 +18,12 @@
 <%--@elvariable id="currentResource" type="org.jahia.services.render.Resource"--%>
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 
+<!-- Material Design -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/css/material.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/js/material.min.js"></script>
+
 <!-- CSS -->
-<template:addResources type="css" resources="bundle.min.css" /> 
+<template:addResources type="css" resources="bundle.min.css" />
 
 <!-- Vars -->
 <c:set var="type"       value="${currentNode.properties['type'].string}"        />
@@ -29,47 +33,91 @@
 <c:set var="movingTime" value="${currentNode.properties['moving_time'].string}" />
 
 <!-- Content -->
-<div class="development"></div>
-<div class="panel panel-info">
-    <div class="panel-heading">Activity : ${name}</div>
-    <div class="panel-body">
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label for="activityName" class="col-sm-2 control-label">Name</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="activityName" value="${name}" disabled>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="activityType" class="col-sm-2 control-label">Type</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="activityType" value="${type}" disabled>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="activityDistance" class="col-sm-2 control-label">Distance</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="activityDistance" value="${distance}" disabled>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="activityMovingTime" class="col-sm-2 control-label">Time</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="activityMovingTime" value="${movingTime}" disabled>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="activityStartDate" class="col-sm-2 control-label">Date</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="activityStartDate" value="${startDate}" disabled>
-                </div>
-            </div>
-        </form>
+<div class="content" style="display: none;">
+
+    <div class="development"></div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Activity</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <fieldset>
+                    <legend>Details</legend>
+                    <div class="form-group">
+                        <label for="inputName" class="col-lg-2 control-label">Name</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" id="inputName" value="${fn:escapeXml(name)}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputDistance" class="col-lg-2 control-label">Distance</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" id="inputDistance" value="${distance} kms">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputMovingTime" class="col-lg-2 control-label">Name</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" id="inputMovingTime" value="${movingTime}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputStartDate" class="col-lg-2 control-label">Date</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" id="inputStartDate" value="${startDate}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputName" class="col-lg-2 control-label">Type</label>
+                        <div class="col-lg-10">
+                            <div class="radio radio-primary">
+                                <label>
+                                    <input type="radio" name="optionsRadiosType" id="optionsRadiosRide" value="Ride">
+                                    Ride
+                                </label>
+                            </div>
+                            <div class="radio radio-primary">
+                                <label>
+                                    <input type="radio" name="optionsRadiosType" id="optionsRadiosRun" value="Run">
+                                    Run
+                                </label>
+                            </div>
+                            <div class="radio radio-primary">
+                                <label>
+                                    <input type="radio" name="optionsRadiosType" id="optionsRadiosWalk" value="Walk">
+                                    Walk
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
+
+    <p class="text-center">
+        <button type="submit" class="btn btn-info" onclick="javascript:window.history.back();">Back</button>
+    </p>
+
 </div>
 
-<p class="text-center">
-    <a class="btn btn-warning btn-sm" href="#" role="button" onclick="javascript:window.history.back();">
-        Back
-    </a>
-</p>
+<div class="boxCenter">
+    <div class="spinner"></div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Init material design
+        $.material.init();
+        // Select the activity type
+        var type = '<c:out value="${type}" />';
+        $("#optionsRadios" + type).prop("checked", true);
+        // Loading
+        setTimeout(function() {
+            $('.spinner').hide();
+            $('.content').show();
+        }, 2000);
+    });
+</script>
