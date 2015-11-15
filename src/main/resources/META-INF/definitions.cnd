@@ -3,11 +3,11 @@
 
 [jnt:stravaActivity] > jnt:content, jmix:structuredContent
 - id (string) hidden
-- name (string)
-- distance (string)
-- type (string)
-- moving_time (string)
-- start_date (string)
+- name (string) protected
+- distance (string) protected
+- type (string) protected
+- moving_time (string) protected
+- start_date (string) protected
 - filename (string)
 
 [jnt:stravaActivities] > jnt:content, jmix:structuredContent
