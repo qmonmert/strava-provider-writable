@@ -34,7 +34,7 @@ External data provider to connect [Jahia](https://www.jahia.com/) and [Strava](h
 
 3. Gulp
 
-    * Go into the project and launch in a terminal :
+    * Go into the project and launch in a terminal (prerequisites : ruby, sass, compass) :
         ```
         $ npm install
         $ gulp

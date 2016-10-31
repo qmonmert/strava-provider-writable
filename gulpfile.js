@@ -84,7 +84,7 @@ gulp.task('watch', function() {
 gulp.task('browser-sync', function() {
 	browserSync.init({
         proxy: "http://localhost:8080/",
-        startPath: "/cms/render/default/en/sites/strava-site/home.html"
+        startPath: "/cms/render/default/fr/sites/strava-site/home.html"
     });
 });
 
